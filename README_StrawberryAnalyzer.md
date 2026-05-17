@@ -35,18 +35,7 @@ npx expo install expo-image-picker expo-file-system
 npm install react-native-image-picker react-native-fs
 ```
 
-### 2 — Add your Anthropic API key
-
-Open `strawberryAnalyzer.js` and replace:
-```js
-const ANTHROPIC_API_KEY = "YOUR_API_KEY_HERE";
-```
-with your real key from https://console.anthropic.com
-
-Or pass it dynamically (recommended for production — never hardcode keys):
-```js
-const report = await analyzeStrawberryImage(base64, process.env.ANTHROPIC_API_KEY);
-```
+### 2 — Add your GEMINI API key
 
 ### 3 — Copy the file into your project
 
@@ -161,15 +150,3 @@ console.log(report);
 
 ---
 
-## Cost estimate
-
-Each image analysis call uses ~1,500–2,500 tokens (input + output).
-At Claude Sonnet 4 pricing this is roughly **$0.005–$0.01 per scan** — well under a cent.
-
----
-
-## Security note
-
-Never ship your Anthropic API key inside your app binary. In production:
-- Store it in your backend and proxy requests through your own server, OR
-- Use environment variables with a secrets manager (e.g. Expo's EAS Secrets).
