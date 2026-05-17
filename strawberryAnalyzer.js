@@ -1,26 +1,9 @@
 /**
- * Strawberry Plant Health Analyzer
- * Powered by Google Gemini 1.5 Flash (FREE tier — 1,500 requests/day at no cost)
- * -----------------------------------
- * Drop this module into your mobile app (React Native, Expo, etc.).
- * Call analyzeStrawberryImage(base64ImageString) with a JPEG/PNG photo
- * of the plant and receive a structured JSON report covering:
- *   - Detected variety (matched against the GIS dataset)
- *   - Plant health status
- *   - Soil needs & recommendations
- *   - Plant care instructions
- *   - Alerts for disease or pest risk
- *
- * HOW TO GET YOUR FREE API KEY (takes 2 minutes, no credit card):
+ * For BRANDON: HOW TO GET YOUR API KEY
  *   1. Go to https://aistudio.google.com/app/apikey
  *   2. Sign in with any Google account
  *   3. Click "Create API key"
- *   4. Paste the key into GEMINI_API_KEY below
- *
- * FREE TIER LIMITS:
- *   - 1,500 requests per day
- *   - 1,000,000 tokens per minute
- *   - No credit card required
+ *   4. Paste the key into INPUT API KEY HERE below
  *
  * USAGE EXAMPLE:
  *   import { analyzeStrawberryImage } from './strawberryAnalyzer';
@@ -34,14 +17,10 @@
  *   console.log(report.detectedVariety);   // matched variety name or "Unknown"
  */
 
-// ─── Configuration ─────────────────────────────────────────────────────────────
-
-const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"; // https://aistudio.google.com/app/apikey
-const GEMINI_MODEL   = "gemini-1.5-flash";          // Free tier model
+const GEMINI_API_KEY = "INPUT API KEY HERE"; // https://aistudio.google.com/app/apikey
+const GEMINI_MODEL   = "gemini-1.5-flash";          
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
-// ─── Strawberry GIS Dataset (20 varieties) ─────────────────────────────────────
-// Source: Strawberry_GIS_Dataset CSV (verified 2026-03-24)
 
 const STRAWBERRY_DATASET = [
   { variety_id: 1,  common_name: "Chandler",      scientific_name: "Fragaria × ananassa 'Chandler'",      usda_zone_min: "5b", usda_zone_max: "8b", temp_min_f: -10, temp_max_f: 90,  humidity_pref: "Medium", fertilizer_needs: "Balanced 10-10-10, slow-release at planting",          ph_min: 5.8, ph_max: 6.5, soil_type: "Well-drained sandy loam",              sunlight_req: "Full sun", watering_freq: "1–2 in/week, drip preferred",           fruit_season: "June-bearing",  days_to_maturity: 90, plant_spacing_in: 12, yield_lbs_per_plant: 1.5, runner_production: "High", chill_hours_req: 500, heat_tolerance: "Medium", frost_tolerance: "Medium", drought_tolerance: "Low",    disease_resistance: "Botrytis, Leaf scorch",                                    disease_susceptibility: "Root rot, Verticillium wilt",                              pest_vulnerability: "Spider mites, Aphids, Slugs",          best_use: "Fresh / Commercial", container_ok: true,  greenhouse_ok: true  },
@@ -66,7 +45,7 @@ const STRAWBERRY_DATASET = [
   { variety_id: 20, common_name: "Sequoia",        scientific_name: "Fragaria × ananassa 'Sequoia'",        usda_zone_min: "6a", usda_zone_max: "9b", temp_min_f: -10, temp_max_f: 95,  humidity_pref: "Low",    fertilizer_needs: "Balanced 10-10-10, moderate at planting and midseason", ph_min: 5.8, ph_max: 6.5, soil_type: "Well-drained sandy loam",              sunlight_req: "Full sun", watering_freq: "1–2 in/week",                           fruit_season: "June-bearing",  days_to_maturity: 75, plant_spacing_in: 12, yield_lbs_per_plant: 1.5, runner_production: "High", chill_hours_req: 200, heat_tolerance: "High",   frost_tolerance: "Low",    drought_tolerance: "Medium", disease_resistance: "Root rot (moderate), Leaf blight",                         disease_susceptibility: "Verticillium wilt, Powdery mildew",                        pest_vulnerability: "Spider mites, Aphids, Lygus bugs",     best_use: "Fresh / Commercial", container_ok: true,  greenhouse_ok: true  },
 ];
 
-// ─── Prompt builder ─────────────────────────────────────────────────────────────
+
 
 function buildPrompt() {
   const datasetJSON = JSON.stringify(STRAWBERRY_DATASET, null, 2);
@@ -136,16 +115,7 @@ RULES:
 - If the image is not a strawberry plant, set healthStatus to "Unknown" and explain in healthSummary.`;
 }
 
-// ─── Main exported function ─────────────────────────────────────────────────────
 
-/**
- * Analyze a strawberry plant image using Google Gemini (free tier).
- *
- * @param {string} base64Image  - Base64-encoded image (JPEG or PNG, no data-URI prefix).
- * @param {string} [apiKey]     - Optional override. Falls back to GEMINI_API_KEY constant.
- * @param {"image/jpeg"|"image/png"} [mediaType] - Defaults to "image/jpeg".
- * @returns {Promise<object>}   - Parsed JSON report object.
- */
 async function analyzeStrawberryImage(
   base64Image,
   apiKey = GEMINI_API_KEY,
@@ -236,20 +206,7 @@ async function analyzeStrawberryImage(
   }
 }
 
-// ─── React Native / Expo helper ─────────────────────────────────────────────────
 
-/**
- * Convenience wrapper for React Native apps using expo-image-picker.
- * Pass the local `uri` from the picker result directly — no manual base64 needed.
- *
- * Requires one of:
- *   Expo:    expo install expo-file-system
- *   Bare RN: npm install react-native-fs
- *
- * @param {string} imageUri  - Local file URI from image picker.
- * @param {string} [apiKey]  - Optional API key override.
- * @returns {Promise<object>}
- */
 async function analyzeFromUri(imageUri, apiKey = GEMINI_API_KEY) {
   let base64;
 
@@ -285,17 +242,10 @@ async function analyzeFromUri(imageUri, apiKey = GEMINI_API_KEY) {
   return analyzeStrawberryImage(base64, apiKey, mediaType);
 }
 
-// ─── Exports ────────────────────────────────────────────────────────────────────
+// Exports
 
 module.exports = {
-  analyzeStrawberryImage, // Base64 string → report object
-  analyzeFromUri,         // File URI      → report object (React Native / Expo)
-  STRAWBERRY_DATASET,     // Raw dataset array (useful for UI dropdowns, etc.)
+  analyzeStrawberryImage, 
+  analyzeFromUri,         
+  STRAWBERRY_DATASET,
 };
-
-// ─── Quick local test (Node.js only) ───────────────────────────────────────────
-// Uncomment the lines below and run:  node strawberryAnalyzer.js
-//
-// const fs = require('fs');
-// const img = fs.readFileSync('./test_strawberry.jpg').toString('base64');
-// analyzeStrawberryImage(img, 'YOUR_KEY_HERE').then(console.log).catch(console.error);
