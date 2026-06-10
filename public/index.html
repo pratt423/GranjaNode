@@ -445,12 +445,12 @@
     function setLoading(on) {
       analyzeBtn.disabled = on;
       spinner.style.display = on ? 'block' : 'none';
-      btnLabel.textContent  = on ? 'Analyzing…' : '🔬 Analyze Plant';
+      btnLabel.textContent  = on ? 'Analyzing…' : 'Analyze Plant';
       loadingPanel.style.display  = on ? 'block' : 'none';
       if (on) { placeholder.style.display = 'none'; resultsPanel.style.display = 'none'; }
     }
 
-    function showError(msg) { errorBox.textContent = '⚠️ ' + msg; errorBox.style.display = 'block'; }
+    function showError(msg) { errorBox.textContent = msg; errorBox.style.display = 'block'; }
     function hideError()    { errorBox.style.display = 'none'; errorBox.textContent = ''; }
   })();
   </script>
