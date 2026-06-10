@@ -98,7 +98,7 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const mimeType    = req.file.mimetype || 'image/jpeg';
 
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
