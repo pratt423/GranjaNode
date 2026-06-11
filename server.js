@@ -109,7 +109,7 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
               { text: buildPrompt() }
             ]
           }],
-          generationConfig: { temperature: 0.2, maxOutputTokens: 1200 }
+          generationConfig: { temperature: 0.2, maxOutputTokens: 8192 }
         })
       }
     );
